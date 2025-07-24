@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+        start the game
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .perspective {
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-front,
+        .card-back {
+            backface-visibility: hidden;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+    </style>
+
+
+</head>
+
+<body class=" flex  justify-center align-center w-full p-5  m-5" style=" background-image : url('innerpageimg.jpg');">
+    <div class="flex flex-col ">
+        <button class=" button bg-blue-800 text-white px-3 py-2 rounded-md hover:bg-blue-900 "
+            onclick="buttonpress()">StartGame</button>
+
+
+    </div>
+    <div id="classcontainer" class="flex flex-wrap justify-center w-1/3  p-5"></div>
+
+    <script>
+        function buttonpress() {
+            let flipcard = [];
+            let locked = false;
+
+            const image = ['peach.png', 'icecream.png', 'grapes.png', 'cupcake.png', 'chocolate.png', 'chessecake.png', 'cherry.png', 'avacado.png'];
+            const imgpair = [...image, ...image];
+            imgpair.sort(() => Math.random() - (0.5))
+            const classcontainer = document.getElementById("classcontainer");
+            classcontainer.innerHTML = "";
+            imgpair.forEach((img, index) => {
+                const card = document.createElement("div");
+                card.className = "card w-20 h-24 perspective m-2 cursor-pointer";
+                card.dataset.image = img;
+                card.innerHTML = `
+  <div class="card-inner">
+    <div class="card-front bg-blue-900 text-yellow-400 flex items-center
+      justify-center text-xl font-bold border rounded-lg shadow-md">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+        </svg>
+        <span>${index + 1}</span>
+    </div>
+    <div class="card-back">
+      <img src="${img}" alt="image" class="w-10 h-10" />
+    </div>
+  </div>
+`;
+
+
+
+                classcontainer.appendChild(card);
+
+                card.addEventListener('click', () => {
+                    if (locked || card.classList.contains("matched")) return;
+                    const innercards = card.querySelector(".card-inner");
+                    innercards.classList.toggle("rotate-y-180");
+                    flipcard.push(card);
+                    if (flipcard.length === 2) {
+                        locked = true;
+                        const [first, second] = flipcard;
+                        if (first.dataset.image === second.dataset.image) {
+                            first.classList.add("matched");
+                            second.classList.add("matched");
+                            flipcard = [];
+                            locked = false;
+
+                            const allCards = document.querySelectorAll(".card");
+                            const matchedCards = document.querySelectorAll(".card.matched");
+
+                            if (matchedCards.length === allCards.length) {
+                                setTimeout(() => {
+                                    alert("🎉 You Win!");
+                                }, 500);
+                            }
+                        }
+
+                        else {
+                            setTimeout(() => {
+                                first.querySelector(".card-inner").classList.remove("rotate-y-180");
+                                second.querySelector(".card-inner").classList.remove("rotate-y-180");
+                                flipcard = [];
+                                locked = false;
+                            }, (1000));
+                        }
+
+                    }
+                }
+                );
+            });
+        }
+    </script>
+</body>
+
+</html>

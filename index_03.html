@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+        Memorygame
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class=" flex   justify-center align-center w-full bg-blue-100 p-5 " style="background-image: url('bgleaf.jpg');">
+    <div class="flex flex-col justify-center">
+        <h1 class="text-blue-800 font-bold text-4xl p-20"> Memory card game </h1>
+        <nav class="flex justify-center ">
+            <input type="text" placeholder="Enter your name"
+                class="npage w-1/2 border text-center rounded drop-shadow-md p-5 ">
+            <button class="btn w-1/5 bg-blue-800 text-white p-5 rounded-r-md">LOGIN</button>
+        </nav>
+    </div>
+    <script>
+        let npage = document.querySelector(".npage");
+        npage.textContent = npage.value;
+        let btn = document.querySelector(".btn");
+        btn.addEventListener("click", (button) => {
+            if (npage.value === "") {
+                alert("please enter you name");
+                return;
+            }
+            else {
+                window.location.href = "page.html";
+            }
+
+        })
+    </script>
+</body>
+
+</html>
